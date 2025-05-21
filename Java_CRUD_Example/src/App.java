@@ -120,7 +120,7 @@ public class App {
 
 	private static boolean isValidOption(String option) {
 		int optionNumber = Integer.parseInt(option);
-		return optionNumber >= 0 && optionNumber <= 5;
+		return optionNumber >= 1 && optionNumber <= 5;
 	}
 
 	private static boolean isRegisterOption(String option) {

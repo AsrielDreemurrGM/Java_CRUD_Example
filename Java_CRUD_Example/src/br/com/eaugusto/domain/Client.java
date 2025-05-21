@@ -100,11 +100,11 @@ public class Client {
 		return 
 				"Informações do Cliente: \n"
 				+ "Nome: " + name
-				+ "\n CPF: " + cpf
-				+ "\n, Número de Telefone: " + phoneNumber
-				+ "\n, Endereço: " + address
-				+ "\n, Número do Endereço: " + addressNumber
-				+ "\n, Cidade: " + city
-				+ "\n, Estado: " + state;
+				+ "\nCPF: " + cpf
+				+ "\nNúmero de Telefone: " + phoneNumber
+				+ "\nEndereço: " + address
+				+ "\nNúmero do Endereço: " + addressNumber
+				+ "\nCidade: " + city
+				+ "\nEstado: " + state;
 	}
 }
