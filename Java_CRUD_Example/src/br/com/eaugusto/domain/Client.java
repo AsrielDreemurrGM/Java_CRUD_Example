@@ -94,4 +94,17 @@ public class Client {
 		Client other = (Client) obj;
 		return Objects.equals(cpf, other.cpf);
 	}
+
+	@Override
+	public String toString() {
+		return 
+				"Informações do Cliente: \n"
+				+ "Nome: " + name
+				+ "\n CPF: " + cpf
+				+ "\n, Número de Telefone: " + phoneNumber
+				+ "\n, Endereço: " + address
+				+ "\n, Número do Endereço: " + addressNumber
+				+ "\n, Cidade: " + city
+				+ "\n, Estado: " + state;
+	}
 }
