@@ -8,16 +8,16 @@ public class Client {
 	private String cpf;
 	private String phoneNumber;
 	private String address;
-	private Integer number;
+	private String addressNumber;
 	private String city;
 	private String state;
 	
-	public Client(String name, String cpf, String phoneNumber, String address, String numberAsString, String city, String state) {
+	public Client(String name, String cpf, String phoneNumber, String address, String addressNumber, String city, String state) {
 		this.name = name;
 		this.cpf = cpf.trim();
 		this.phoneNumber = phoneNumber.trim();
 		this.address = address;
-		this.number = Integer.valueOf(numberAsString.trim());
+		this.addressNumber = addressNumber.trim();
 		this.city = city;
 		this.state = state;
 	}
@@ -38,8 +38,8 @@ public class Client {
 		return address;
 	}
 
-	public Integer getNumber() {
-		return number;
+	public String getAddressNumber() {
+		return addressNumber;
 	}
 
 	public String getCity() {
@@ -66,8 +66,8 @@ public class Client {
 		this.address = address;
 	}
 
-	public void setNumber(Integer number) {
-		this.number = number;
+	public void setAddressNumber(String addressNumber) {
+		this.addressNumber = addressNumber;
 	}
 
 	public void setCity(String city) {
@@ -94,7 +94,4 @@ public class Client {
 		Client other = (Client) obj;
 		return Objects.equals(cpf, other.cpf);
 	}
-	
-	
-
 }

@@ -39,7 +39,7 @@ public class ClientMapDAO implements IClientDAO {
 		if (registeredClient != null) {
 			registeredClient.setName(client.getName());
 			registeredClient.setPhoneNumber(client.getPhoneNumber());
-			registeredClient.setNumber(client.getNumber());
+			registeredClient.setAddressNumber(client.getAddressNumber());
 			registeredClient.setAddress(client.getAddress());
 			registeredClient.setCity(client.getCity());
 			registeredClient.setState(client.getState());
