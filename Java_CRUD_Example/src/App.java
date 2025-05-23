@@ -14,6 +14,9 @@ public class App {
 		String option = showDashboardPrompt();
 		
 		while (!isValidOption(option)) {
+			if (option == null) {
+				exit();
+			}
 			option = showInvalidOptionPrompt();
 		}
 		
@@ -100,6 +103,15 @@ public class App {
 	}
 
 	private static void register(String data) {
+		if (data == null || data.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(
+					null,
+					"Nenhum dado inserido.",
+					"Erro de Entrada",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
 		String[] splitData = data.split(",");
 		
 		for (int i = 0; i < splitData.length; i++) {
@@ -146,6 +158,10 @@ public class App {
 	}
 	
 	private static boolean isValidOption(String option) {
+		if (option == null || option.trim().isEmpty()) {
+			return false;
+		}
+		
 		int optionNumber = Integer.parseInt(option);
 		return optionNumber >= 1 && optionNumber <= 5;
 	}
