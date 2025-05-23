@@ -9,28 +9,29 @@ import br.com.eaugusto.domain.Client;
 public class ClientSetDAO implements IClientDAO {
 
 	private Set<Client> set;
-	
+
 	public ClientSetDAO() {
 		this.set = new HashSet<>();
 	}
-	
+
 	@Override
 	public Boolean register(Client client) {
 		return set.add(client);
 	}
 
 	@Override
-	public void delete(String cpf) {
+	public Client delete(String cpf) {
 		Client toRemove = search(cpf);
 		if (toRemove != null) {
 			set.remove(toRemove);
 		}
+		return toRemove;
 	}
 
 	@Override
 	public void modify(Client client) {
 		Client existingClient = search(client.getCpf());
-		
+
 		if (existingClient != null) {
 			existingClient.setName(client.getName());
 			existingClient.setPhoneNumber(client.getPhoneNumber());
@@ -44,8 +45,9 @@ public class ClientSetDAO implements IClientDAO {
 	@Override
 	public Client search(String cpf) {
 		for (Client client : set) {
-			if (client.getCpf().equals(cpf));
-			return client;
+			if (client.getCpf().equals(cpf)) {
+				return client;
+			}
 		}
 		return null;
 	}

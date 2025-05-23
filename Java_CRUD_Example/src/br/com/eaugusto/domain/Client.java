@@ -3,7 +3,7 @@ package br.com.eaugusto.domain;
 import java.util.Objects;
 
 public class Client {
-	
+
 	private String name;
 	private String cpf;
 	private String phoneNumber;
@@ -11,7 +11,7 @@ public class Client {
 	private String addressNumber;
 	private String city;
 	private String state;
-	
+
 	public Client(String name, String cpf, String phoneNumber, String address, String addressNumber, String city, String state) {
 		this.name = name;
 		this.cpf = cpf.trim();
