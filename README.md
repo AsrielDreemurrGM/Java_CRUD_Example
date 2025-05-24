@@ -4,6 +4,11 @@
     A beginner-friendly Java desktop application using <code>JOptionPane</code> to manage client data with full CRUD operations, 
     interface-based DAO pattern, input validation, and in-memory storage. Built to reinforce object-oriented principles and Java fundamentals.
   </p>
+<h2>🖼️ Screenshot</h2>
+  <p>A quick look at the main application panels side by side, showcasing the user interface and workflow.</p>
+
+  ![Java CRUD Application Screenshot](https://servidor-host-imagens.vercel.app/Java_CRUD_Example.jpg)
+  
 <h2>📌 Features</h2>
   <ul>
     <li>Client Registration, Search, Update, and Deletion;</li>
