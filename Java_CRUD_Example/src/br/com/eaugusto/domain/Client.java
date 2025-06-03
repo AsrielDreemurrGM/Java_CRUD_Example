@@ -2,7 +2,7 @@ package br.com.eaugusto.domain;
 
 import java.util.Objects;
 
-public class Client {
+public class Client implements Persistable {
 
 	private String name;
 	private String cpf;
