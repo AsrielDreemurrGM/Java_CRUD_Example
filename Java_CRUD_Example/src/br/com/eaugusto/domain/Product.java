@@ -2,10 +2,10 @@ package br.com.eaugusto.domain;
 
 public class Product implements Persistable {
 
-	private Long code;
+	private String code;
 	private String name;
 	
-	public Long getCode() {
+	public String getCode() {
 		return code;
 	}
 	
@@ -13,11 +13,16 @@ public class Product implements Persistable {
 		return name;
 	}
 	
-	public void setCode(Long code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String getCodeOrCPF() {
+		return this.code;
 	}
 }

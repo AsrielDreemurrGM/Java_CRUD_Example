@@ -182,8 +182,9 @@ public class App {
 			return;
 		}
 
-		Client client = iClientDAO.delete(cpf);
+		Client client = iClientDAO.search(cpf);
 		if (client != null) {
+			iClientDAO.delete(cpf);
 			JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso.", "Sucesso na Exclusão", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			showClientNotFoundPrompt();

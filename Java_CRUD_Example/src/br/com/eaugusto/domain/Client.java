@@ -77,6 +77,15 @@ public class Client implements Persistable {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	public void updateWith(Client newInformations) {
+	    this.setName(newInformations.getName());
+	    this.setPhoneNumber(newInformations.getPhoneNumber());
+	    this.setAddress(newInformations.getAddress());
+	    this.setAddressNumber(newInformations.getAddressNumber());
+	    this.setCity(newInformations.getCity());
+	    this.setState(newInformations.getState());
+	}
 
 	@Override
 	public int hashCode() {
@@ -106,5 +115,10 @@ public class Client implements Persistable {
 				+ "\nNúmero do Endereço: " + addressNumber
 				+ "\nCidade: " + city
 				+ "\nEstado: " + state;
+	}
+
+	@Override
+	public String getCodeOrCPF() {
+		return this.cpf;
 	}
 }
