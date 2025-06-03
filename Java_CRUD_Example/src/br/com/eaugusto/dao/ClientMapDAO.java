@@ -3,10 +3,10 @@ package br.com.eaugusto.dao;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.eaugusto.dao.generic.GenericDAO;
+import br.com.eaugusto.dao.generic.GenericMapDAO;
 import br.com.eaugusto.domain.Client;
 
-public class ClientMapDAO extends GenericDAO<Client> implements IClientDAO {
+public class ClientMapDAO extends GenericMapDAO<Client> implements IClientDAO {
 
 	public ClientMapDAO() {
 		super();

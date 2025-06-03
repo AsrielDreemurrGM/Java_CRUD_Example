@@ -6,7 +6,7 @@ import java.util.Map;
 
 import br.com.eaugusto.domain.Persistable;
 
-public abstract class GenericDAO<T extends Persistable> implements IGenericDAO<T> {
+public abstract class GenericMapDAO<T extends Persistable> implements IGenericDAO<T> {
 
 	protected Map<Class<T>, Map<String, T>> map;
 	
@@ -14,7 +14,7 @@ public abstract class GenericDAO<T extends Persistable> implements IGenericDAO<T
 	
 	public abstract void updateRegisteredEntityWithNewData(T newEntity, T registeredEntity);
 	
-	protected GenericDAO() {
+	protected GenericMapDAO() {
 		if (this.map == null) {
 			this.map = new HashMap<>();
 		}
