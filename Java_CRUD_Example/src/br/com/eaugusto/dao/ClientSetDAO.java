@@ -23,7 +23,7 @@ public class ClientSetDAO extends GenericDAO<Client> implements IClientDAO {
 	}
 
 	@Override
-	public void modify(Client entity, Client registeredEntity) {
+	public void updateRegisteredEntityWithNewData(Client entity, Client registeredEntity) {
 		registeredEntity.updateWith(entity);
 	}
 }

@@ -12,7 +12,7 @@ public abstract class GenericDAO<T extends Persistable> implements IGenericDAO<T
 	
 	public abstract Class<T> getClassType();
 	
-	public abstract void modify(T entity, T registeredEntity);
+	public abstract void updateRegisteredEntityWithNewData(T newEntity, T registeredEntity);
 	
 	protected GenericDAO() {
 		if (this.map == null) {
@@ -42,13 +42,13 @@ public abstract class GenericDAO<T extends Persistable> implements IGenericDAO<T
 	}
 
 	@Override
-	public void modify(T entity) {
+	public void updateEntity(T entity) {
 		Map<String, T> innerMap = this.map.get(getClassType());
 		
 		T registeredEntity = innerMap.get(entity.getCodeOrCPF());
 		
 		if (registeredEntity != null) {
-			modify(entity, registeredEntity);
+			updateRegisteredEntityWithNewData(entity, registeredEntity);
 		}
 	}
 

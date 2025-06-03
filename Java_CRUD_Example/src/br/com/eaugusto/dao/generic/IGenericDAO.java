@@ -10,7 +10,7 @@ public interface IGenericDAO <T extends Persistable> {
 
 	public void delete(String value);
 
-	public void modify(T entity);
+	public void updateEntity(T entity);
 
 	public T search(String value);
 

@@ -235,7 +235,7 @@ public class App {
 				splitData[3],
 				splitData[4],
 				splitData[5]);
-		iClientDAO.modify(updatedClient);
+		iClientDAO.updateEntity(updatedClient);
 		JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 	}
 

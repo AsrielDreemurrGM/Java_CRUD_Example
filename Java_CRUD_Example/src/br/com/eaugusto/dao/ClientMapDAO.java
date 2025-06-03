@@ -23,7 +23,7 @@ public class ClientMapDAO extends GenericDAO<Client> implements IClientDAO {
 	}
 
 	@Override
-	public void modify(Client entity, Client registeredEntity) {
-		registeredEntity.updateWith(entity);
+	public void updateRegisteredEntityWithNewData(Client newClientInformation, Client registeredClient) {
+		registeredClient.updateWith(newClientInformation);
 	}
 }
