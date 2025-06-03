@@ -2,10 +2,15 @@ package br.com.eaugusto.app;
 import javax.swing.JOptionPane;
 
 import br.com.eaugusto.dao.ClientMapDAO;
+import br.com.eaugusto.dao.ClientSetDAO;
 import br.com.eaugusto.dao.IClientDAO;
 import br.com.eaugusto.domain.Client;
 
 public class App {
+	
+	// Toggle this flag for quick switching between using Set or Map for storage
+	boolean useMap = true;
+	IClientDAO clientDAO = useMap ? new ClientMapDAO() : new ClientSetDAO();
 
 	private static IClientDAO iClientDAO;
 
