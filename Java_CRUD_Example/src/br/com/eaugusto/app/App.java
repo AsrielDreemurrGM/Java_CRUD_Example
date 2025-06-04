@@ -102,10 +102,6 @@ public class App {
 
 			option = showDashboardPrompt();
 		}
-
-		if (isRegisterOption(option)) {
-			JOptionPane.showInputDialog(null, "Opção " + option,"Cadastro", JOptionPane.INFORMATION_MESSAGE);			
-		}
 	}
 
 	private static String showDashboardPrompt() {
@@ -162,21 +158,21 @@ public class App {
 	}
 
 	private static void showNoValueInsertedPrompt() {
-		showProductNotFoundPrompt();
 		JOptionPane.showMessageDialog(
 				null,
-				"Produto não encontrad",
-				"Erro - Produto Não Enconto",
+				"Nenhum valor foi inserido.",
+				ENTRYERROR,
 				JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static boolean isValidOption(String option) {
-		if (option == null || option.trim().isEmpty()) {
+		if (option == null || option.trim().isEmpty()) return false;
+		try {
+			int optionNumber = Integer.parseInt(option.trim());
+			return optionNumber >= 1 && optionNumber <= 5;
+		} catch (NumberFormatException e) {
 			return false;
 		}
-
-		int optionNumber = Integer.parseInt(option);
-		return optionNumber >= 1 && optionNumber <= 5;
 	}
 
 	private static void search(String data) {
@@ -219,7 +215,7 @@ public class App {
 			int originalLength = splitData.length;
 			splitData = java.util.Arrays.copyOf(splitData, 7);
 			for (int i = originalLength; i < 7; i++) {
-				splitData[i] = null;
+				splitData[i] = NOTINFORMEDERROR;
 			}
 		}
 
@@ -287,7 +283,7 @@ public class App {
 			int originalLength = splitData.length;
 			splitData = java.util.Arrays.copyOf(splitData, 6);
 			for (int i = originalLength; i < 6; i++) {
-				splitData[i] = null;
+				splitData[i] = NOTINFORMEDERROR;
 			}
 		}
 
@@ -342,7 +338,7 @@ public class App {
 			int originalLength = splitData.length;
 			splitData = java.util.Arrays.copyOf(splitData, 5);
 			for (int i = originalLength; i < 5; i++) {
-				splitData[i] = null;
+				splitData[i] = NOTINFORMEDERROR;
 			}
 		}
 
@@ -408,7 +404,7 @@ public class App {
 			int originalLength = splitData.length;
 			splitData = java.util.Arrays.copyOf(splitData, 4);
 			for (int i = originalLength; i < 4; i++) {
-				splitData[i] = null;
+				splitData[i] = NOTINFORMEDERROR;
 			}
 		}
 
