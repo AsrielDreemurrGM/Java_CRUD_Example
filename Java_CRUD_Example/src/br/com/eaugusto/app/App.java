@@ -8,6 +8,7 @@ import br.com.eaugusto.dao.IProductDAO;
 import br.com.eaugusto.dao.ProductMapDAO;
 import br.com.eaugusto.domain.Client;
 import br.com.eaugusto.domain.Product;
+import br.com.eaugusto.ui.PromptHelper;
 
 public class App {
 
@@ -38,13 +39,13 @@ public class App {
 
 		boolean isClient = (entityChoice == 0);
 
-		String option = showDashboardPrompt();
+		String option = PromptHelper.showDashboardPrompt();
 
 		while (!isValidOption(option)) {
 			if (option == null) {
 				exit();
 			}
-			option = showInvalidOptionPrompt();
+			option = PromptHelper.showInvalidOptionPrompt();
 		}
 
 		while (isValidOption(option)) {
@@ -99,70 +100,8 @@ public class App {
 					modifyProduct(codeOrCpf);
 				}
 			}
-
-			option = showDashboardPrompt();
+			option = PromptHelper.showDashboardPrompt();
 		}
-	}
-
-	private static String showDashboardPrompt() {
-		return JOptionPane.showInputDialog(
-				null,
-				"Digite 1 para cadastro, 2 para consultar, 3 para exclusão, "
-						+ "4 para alteração ou 5 para sair.",
-						"Dashboard",
-						JOptionPane.INFORMATION_MESSAGE
-				);
-	}
-
-	private static String showInvalidOptionPrompt() {
-		return JOptionPane.showInputDialog(
-				null,
-				"""
-				Opção inválida. Por favor, escolha entre:
-				1 - Cadastrar 2 - Consultar 3 - Excluir 4 - Alterar 5 - Sair
-				""",
-				"Opção Inválida",
-				JOptionPane.WARNING_MESSAGE);
-	}
-
-	private static void showMissingCpfPrompt() {
-		JOptionPane.showMessageDialog(
-				null,
-				"CPF não pode estar vazio.",
-				"CPF - Erro de Entrada",
-				JOptionPane.WARNING_MESSAGE);
-	}
-
-	private static void showMissingProductPrompt() {
-		JOptionPane.showMessageDialog(
-				null,
-				"Código do produto não pode estar vazio.",
-				ENTRYERROR,
-				JOptionPane.WARNING_MESSAGE);
-	}
-
-	private static void showClientNotFoundPrompt() {
-		JOptionPane.showMessageDialog(
-				null,
-				"Cliente não encontrado.",
-				"Erro - Cliente Não Encontrado",
-				JOptionPane.WARNING_MESSAGE);
-	}
-
-	private static void showProductNotFoundPrompt() {
-		JOptionPane.showMessageDialog(
-				null,
-				"Produto não encontrado.",
-				"Erro - Produto Não Encontrado",
-				JOptionPane.WARNING_MESSAGE);
-	}
-
-	private static void showNoValueInsertedPrompt() {
-		JOptionPane.showMessageDialog(
-				null,
-				"Nenhum valor foi inserido.",
-				ENTRYERROR,
-				JOptionPane.WARNING_MESSAGE);
 	}
 
 	private static boolean isValidOption(String option) {
@@ -177,7 +116,7 @@ public class App {
 
 	private static void search(String data) {
 		if(data == null || data.trim().isEmpty()) {
-			showMissingCpfPrompt();
+			PromptHelper.showMissingCpfPrompt();
 			return;
 		}
 
@@ -190,13 +129,13 @@ public class App {
 							"Informações do Cliente",
 							JOptionPane.INFORMATION_MESSAGE);			
 		} else {
-			showClientNotFoundPrompt();
+			PromptHelper.showClientNotFoundPrompt();
 		}
 	}
 
 	private static void register(String data) {
 		if (data == null || data.trim().isEmpty()) {
-			showNoValueInsertedPrompt();
+			PromptHelper.showNoValueInsertedPrompt();
 			return;
 		}
 
@@ -238,7 +177,7 @@ public class App {
 
 	private static void delete(String cpf) {
 		if (cpf == null || cpf.trim().isEmpty()) {
-			showMissingCpfPrompt();
+			PromptHelper.showMissingCpfPrompt();
 			return;
 		}
 
@@ -247,19 +186,19 @@ public class App {
 			iClientDAO.delete(cpf);
 			JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso.", "Sucesso na Exclusão", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			showClientNotFoundPrompt();
+			PromptHelper.showClientNotFoundPrompt();
 		}
 	}
 
 	private static void modify(String cpf) {
 		if (cpf == null || cpf.trim().isEmpty()) {
-			showMissingCpfPrompt();
+			PromptHelper.showMissingCpfPrompt();
 			return;
 		}
 
 		Client registeredClient = iClientDAO.search(cpf);
 		if (registeredClient == null) {
-			showClientNotFoundPrompt();
+			PromptHelper.showClientNotFoundPrompt();
 			return;
 		}
 
@@ -269,7 +208,7 @@ public class App {
 				"Alterar Cliente",
 				JOptionPane.INFORMATION_MESSAGE);
 		if (newData == null || newData.trim().isEmpty()) {
-			showNoValueInsertedPrompt();
+			PromptHelper.showNoValueInsertedPrompt();
 			return;
 		}
 
@@ -301,7 +240,7 @@ public class App {
 
 	private static void searchProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
-			showMissingProductPrompt();
+			PromptHelper.showMissingProductPrompt();
 			return;
 		}
 
@@ -309,7 +248,7 @@ public class App {
 		if (product != null) {
 			JOptionPane.showMessageDialog(null, "Produto encontrado:\n" + product.toString(), "Informações do Produto", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			showProductNotFoundPrompt();
+			PromptHelper.showProductNotFoundPrompt();
 		}
 	}
 
@@ -358,7 +297,7 @@ public class App {
 
 	private static void deleteProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
-			showMissingProductPrompt();
+			PromptHelper.showMissingProductPrompt();
 			return;
 		}
 
@@ -367,19 +306,19 @@ public class App {
 			iProductDAO.delete(code);
 			JOptionPane.showMessageDialog(null, "Produto excluído com sucesso.", "Sucesso na Exclusão", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			showProductNotFoundPrompt();
+			PromptHelper.showProductNotFoundPrompt();
 		}
 	}
 
 	private static void modifyProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
-			showMissingProductPrompt();
+			PromptHelper.showMissingProductPrompt();
 			return;
 		}
 
 		Product registeredProduct = iProductDAO.search(code);
 		if (registeredProduct == null) {
-			showProductNotFoundPrompt();
+			PromptHelper.showProductNotFoundPrompt();
 			return;
 		}
 
@@ -390,7 +329,7 @@ public class App {
 				JOptionPane.INFORMATION_MESSAGE);
 
 		if (newData == null || newData.trim().isEmpty()) {
-			showNoValueInsertedPrompt();
+			PromptHelper.showNoValueInsertedPrompt();
 			return;
 		}
 
