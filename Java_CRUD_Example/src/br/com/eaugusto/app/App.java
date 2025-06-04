@@ -23,80 +23,96 @@ public class App {
 	private static IProductDAO iProductDAO;
 
 	public static void main(String[] args) {
+	    iClientDAO = new ClientMapDAO();
+	    iProductDAO = new ProductMapDAO();
 
-		iClientDAO = new ClientMapDAO();
-		iProductDAO = new ProductMapDAO();
+	    int entityChoice = MenuHelper.showEntitySelection();
+	    boolean isClient = MenuHelper.isClientSelected(entityChoice);
 
-		int entityChoice = MenuHelper.showEntitySelection();
-
-		boolean isClient = MenuHelper.isClientSelected(entityChoice);
-
-		String option = MenuHelper.showDashboardPrompt();
-
-		while (!MenuHelper.isValidOption(option)) {
-			if (option == null) {
-				PromptHelper.exitPrompt();
-			}
-			option = MenuHelper.showInvalidOptionPrompt();
-		}
-
-		while (MenuHelper.isValidOption(option)) {
-			if (MenuHelper.isExitOption(option)) {
-				PromptHelper.exitPrompt();
-			} else if (MenuHelper.isRegisterOption(option)) {
-				String data = JOptionPane.showInputDialog(
-						null,
-						isClient ?
-								"Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado" :
-									"Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
-									"Cadastrar", 
-									JOptionPane.INFORMATION_MESSAGE
-						);
-				if (isClient) {
-					register(data);
-
-				} else {
-					registerProduct(data);
-				}
-			} else if (MenuHelper.isSearchOption(option)) {
-				String data = JOptionPane.showInputDialog(
-						null, 
-						isClient ? "Digite o CPF:" : "Digite o código do produto:",
-								"Pesquisar", 
-								JOptionPane.INFORMATION_MESSAGE
-						);
-				if (isClient) {
-					search(data);
-				} else {
-					searchProduct(data);
-				}
-			} else if (MenuHelper.isDeleteOption(option)) {
-				String codeOrCpf = JOptionPane.showInputDialog(
-						null,
-						isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
-								"Excluir",
-								JOptionPane.INFORMATION_MESSAGE);
-				if (isClient) {
-					delete(codeOrCpf);
-				} else {
-					deleteProduct(codeOrCpf);
-				}
-			} else if (MenuHelper.isModifyOption(option)) {
-				String codeOrCpf = JOptionPane.showInputDialog(
-						null,
-						isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
-								"Alterar",
-								JOptionPane.INFORMATION_MESSAGE);
-				if (isClient) {
-					modify(codeOrCpf);
-				} else {
-					modifyProduct(codeOrCpf);
-				}
-			}
-			option = MenuHelper.showDashboardPrompt();
-		}
+	    runDashboardLoop(isClient);
 	}
 
+	private static void runDashboardLoop(boolean isClient) {
+	    String option = MenuHelper.showDashboardPrompt();
+
+	    while (!MenuHelper.isValidOption(option)) {
+	        if (option == null) {
+	            PromptHelper.exitPrompt();
+	        }
+	        option = MenuHelper.showInvalidOptionPrompt();
+	    }
+
+	    while (MenuHelper.isValidOption(option)) {
+	        if (MenuHelper.isExitOption(option)) {
+	            PromptHelper.exitPrompt();
+	        } else {
+	            handleOption(option, isClient);
+	        }
+	        option = MenuHelper.showDashboardPrompt();
+	    }
+	}
+	
+	private static void handleOption(String option, boolean isClient) {
+	    if (MenuHelper.isRegisterOption(option)) {
+	        String data = JOptionPane.showInputDialog(
+	            null,
+	            isClient
+	                ? "Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado"
+	                : "Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
+	            "Cadastrar",
+	            JOptionPane.INFORMATION_MESSAGE
+	        );
+
+	        if (isClient) {
+	            register(data);
+	        } else {
+	            registerProduct(data);
+	        }
+
+	    } else if (MenuHelper.isSearchOption(option)) {
+	        String data = JOptionPane.showInputDialog(
+	            null,
+	            isClient ? "Digite o CPF:" : "Digite o código do produto:",
+	            "Pesquisar",
+	            JOptionPane.INFORMATION_MESSAGE
+	        );
+
+	        if (isClient) {
+	            search(data);
+	        } else {
+	            searchProduct(data);
+	        }
+
+	    } else if (MenuHelper.isDeleteOption(option)) {
+	        String codeOrCpf = JOptionPane.showInputDialog(
+	            null,
+	            isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
+	            "Excluir",
+	            JOptionPane.INFORMATION_MESSAGE
+	        );
+
+	        if (isClient) {
+	            delete(codeOrCpf);
+	        } else {
+	            deleteProduct(codeOrCpf);
+	        }
+
+	    } else if (MenuHelper.isModifyOption(option)) {
+	        String codeOrCpf = JOptionPane.showInputDialog(
+	            null,
+	            isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
+	            "Alterar",
+	            JOptionPane.INFORMATION_MESSAGE
+	        );
+
+	        if (isClient) {
+	            modify(codeOrCpf);
+	        } else {
+	            modifyProduct(codeOrCpf);
+	        }
+	    }
+	}
+	
 	private static void search(String data) {
 		if(data == null || data.trim().isEmpty()) {
 			PromptHelper.showMissingCpfPrompt();
