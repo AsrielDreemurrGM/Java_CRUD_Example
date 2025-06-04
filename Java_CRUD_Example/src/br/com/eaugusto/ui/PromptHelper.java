@@ -5,9 +5,14 @@ import javax.swing.JOptionPane;
 public class PromptHelper {
 
 	private PromptHelper() {
-	    // Utility class, must not be instantiated.
+		// Utility class, must not be instantiated.
 	}
-	
+
+	public static void exitPrompt() {
+		JOptionPane.showMessageDialog(null, "Até logo :) ","Saindo", JOptionPane.INFORMATION_MESSAGE);
+		System.exit(0);
+	}
+
 	public static String showDashboardPrompt() {
 		return JOptionPane.showInputDialog(
 				null,

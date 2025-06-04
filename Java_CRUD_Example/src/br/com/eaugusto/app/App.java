@@ -8,6 +8,7 @@ import br.com.eaugusto.dao.IProductDAO;
 import br.com.eaugusto.dao.ProductMapDAO;
 import br.com.eaugusto.domain.Client;
 import br.com.eaugusto.domain.Product;
+import br.com.eaugusto.ui.MenuHelper;
 import br.com.eaugusto.ui.PromptHelper;
 
 public class App {
@@ -26,32 +27,23 @@ public class App {
 		iClientDAO = new ClientMapDAO();
 		iProductDAO = new ProductMapDAO();
 
-		Object[] options = {"Cliente", "Produto"};
-		int entityChoice = JOptionPane.showOptionDialog(
-				null,
-				"Você quer trabalhar com Cliente ou Produto?",
-				"Escolha de Entidade",
-				JOptionPane.DEFAULT_OPTION,
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				options,
-				options[0]);
+		int entityChoice = MenuHelper.showEntitySelection();
 
-		boolean isClient = (entityChoice == 0);
+		boolean isClient = MenuHelper.isClientSelected(entityChoice);
 
-		String option = PromptHelper.showDashboardPrompt();
+		String option = MenuHelper.showDashboardPrompt();
 
-		while (!isValidOption(option)) {
+		while (!MenuHelper.isValidOption(option)) {
 			if (option == null) {
-				exit();
+				PromptHelper.exitPrompt();
 			}
-			option = PromptHelper.showInvalidOptionPrompt();
+			option = MenuHelper.showInvalidOptionPrompt();
 		}
 
-		while (isValidOption(option)) {
-			if (isExitOption(option)) {
-				exit();
-			} else if (isRegisterOption(option)) {
+		while (MenuHelper.isValidOption(option)) {
+			if (MenuHelper.isExitOption(option)) {
+				PromptHelper.exitPrompt();
+			} else if (MenuHelper.isRegisterOption(option)) {
 				String data = JOptionPane.showInputDialog(
 						null,
 						isClient ?
@@ -62,10 +54,11 @@ public class App {
 						);
 				if (isClient) {
 					register(data);
+
 				} else {
 					registerProduct(data);
 				}
-			} else if (isSearchOption(option)) {
+			} else if (MenuHelper.isSearchOption(option)) {
 				String data = JOptionPane.showInputDialog(
 						null, 
 						isClient ? "Digite o CPF:" : "Digite o código do produto:",
@@ -77,7 +70,7 @@ public class App {
 				} else {
 					searchProduct(data);
 				}
-			} else if (isDeleteOption(option)) {
+			} else if (MenuHelper.isDeleteOption(option)) {
 				String codeOrCpf = JOptionPane.showInputDialog(
 						null,
 						isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
@@ -88,7 +81,7 @@ public class App {
 				} else {
 					deleteProduct(codeOrCpf);
 				}
-			} else if (isModifyOption(option)) {
+			} else if (MenuHelper.isModifyOption(option)) {
 				String codeOrCpf = JOptionPane.showInputDialog(
 						null,
 						isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
@@ -100,17 +93,7 @@ public class App {
 					modifyProduct(codeOrCpf);
 				}
 			}
-			option = PromptHelper.showDashboardPrompt();
-		}
-	}
-
-	private static boolean isValidOption(String option) {
-		if (option == null || option.trim().isEmpty()) return false;
-		try {
-			int optionNumber = Integer.parseInt(option.trim());
-			return optionNumber >= 1 && optionNumber <= 5;
-		} catch (NumberFormatException e) {
-			return false;
+			option = MenuHelper.showDashboardPrompt();
 		}
 	}
 
@@ -371,30 +354,5 @@ public class App {
 					"Erro",
 					JOptionPane.ERROR_MESSAGE);
 		}
-	}
-
-	private static void exit() {
-		JOptionPane.showMessageDialog(null, "Até logo :) ","Saindo", JOptionPane.INFORMATION_MESSAGE);
-		System.exit(0);
-	}
-
-	private static boolean isRegisterOption(String option) {
-		return "1".equals(option);
-	}
-
-	private static boolean isSearchOption(String option) {
-		return "2".equals(option);
-	}
-
-	private static boolean isDeleteOption(String option) {
-		return "3".equals(option);
-	}
-
-	private static boolean isModifyOption(String option) {
-		return "4".equals(option);
-	}
-
-	private static boolean isExitOption(String option) {
-		return "5".equals(option);
 	}
 }
