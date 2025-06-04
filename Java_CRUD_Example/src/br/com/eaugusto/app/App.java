@@ -4,18 +4,39 @@ import javax.swing.JOptionPane;
 import br.com.eaugusto.dao.ClientMapDAO;
 import br.com.eaugusto.dao.ClientSetDAO;
 import br.com.eaugusto.dao.IClientDAO;
+import br.com.eaugusto.dao.IProductDAO;
+import br.com.eaugusto.dao.ProductMapDAO;
 import br.com.eaugusto.domain.Client;
+import br.com.eaugusto.domain.Product;
 
 public class App {
-	
+
 	// Toggle this flag for quick switching between using Set or Map for storage
+	private static final String NOTINFORMEDERROR = "Não informado";
+	private static final String ENTRYERROR = "Erro de Entrada";
 	boolean useMap = true;
 	IClientDAO clientDAO = useMap ? new ClientMapDAO() : new ClientSetDAO();
 
 	private static IClientDAO iClientDAO;
+	private static IProductDAO iProductDAO;
 
 	public static void main(String[] args) {
+
 		iClientDAO = new ClientMapDAO();
+		iProductDAO = new ProductMapDAO();
+
+		Object[] options = {"Cliente", "Produto"};
+		int entityChoice = JOptionPane.showOptionDialog(
+				null,
+				"Você quer trabalhar com Cliente ou Produto?",
+				"Escolha de Entidade",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[0]);
+
+		boolean isClient = (entityChoice == 0);
 
 		String option = showDashboardPrompt();
 
@@ -31,35 +52,52 @@ public class App {
 				exit();
 			} else if (isRegisterOption(option)) {
 				String data = JOptionPane.showInputDialog(
-						null, 
-						"Digite os dados do cliente separados por vírgula, conforme o exemplo: \n"
-								+ "Nome, CPF, Telefone, Endereço, Número do Endereço, Cidade e Estado",
-								"Cadastrar", 
-								JOptionPane.INFORMATION_MESSAGE
+						null,
+						isClient ?
+								"Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado" :
+									"Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
+									"Cadastrar", 
+									JOptionPane.INFORMATION_MESSAGE
 						);
-				register(data);
+				if (isClient) {
+					register(data);
+				} else {
+					registerProduct(data);
+				}
 			} else if (isSearchOption(option)) {
 				String data = JOptionPane.showInputDialog(
 						null, 
-						"Digite o CPF:",
-						"Pesquisar", 
-						JOptionPane.INFORMATION_MESSAGE
+						isClient ? "Digite o CPF:" : "Digite o código do produto:",
+								"Pesquisar", 
+								JOptionPane.INFORMATION_MESSAGE
 						);
-				search(data);
+				if (isClient) {
+					search(data);
+				} else {
+					searchProduct(data);
+				}
 			} else if (isDeleteOption(option)) {
-				String cpf = JOptionPane.showInputDialog(
+				String codeOrCpf = JOptionPane.showInputDialog(
 						null,
-						"Digite o CPF do cliente a excluir:",
-						"Excluir",
-						JOptionPane.INFORMATION_MESSAGE);
-				delete(cpf);
+						isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
+								"Excluir",
+								JOptionPane.INFORMATION_MESSAGE);
+				if (isClient) {
+					delete(codeOrCpf);
+				} else {
+					deleteProduct(codeOrCpf);
+				}
 			} else if (isModifyOption(option)) {
-				String cpf = JOptionPane.showInputDialog(
+				String codeOrCpf = JOptionPane.showInputDialog(
 						null,
-						"Digite o CPF do cliente a alterar:",
-						"Alterar",
-						JOptionPane.INFORMATION_MESSAGE);
-				modify(cpf);
+						isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
+								"Alterar",
+								JOptionPane.INFORMATION_MESSAGE);
+				if (isClient) {
+					modify(codeOrCpf);
+				} else {
+					modifyProduct(codeOrCpf);
+				}
 			}
 
 			option = showDashboardPrompt();
@@ -95,7 +133,15 @@ public class App {
 		JOptionPane.showMessageDialog(
 				null,
 				"CPF não pode estar vazio.",
-				"Erro de Entrada",
+				"CPF - Erro de Entrada",
+				JOptionPane.WARNING_MESSAGE);
+	}
+
+	private static void showMissingProductPrompt() {
+		JOptionPane.showMessageDialog(
+				null,
+				"Código do produto não pode estar vazio.",
+				ENTRYERROR,
 				JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -104,6 +150,23 @@ public class App {
 				null,
 				"Cliente não encontrado.",
 				"Erro - Cliente Não Encontrado",
+				JOptionPane.WARNING_MESSAGE);
+	}
+
+	private static void showProductNotFoundPrompt() {
+		JOptionPane.showMessageDialog(
+				null,
+				"Produto não encontrado.",
+				"Erro - Produto Não Encontrado",
+				JOptionPane.WARNING_MESSAGE);
+	}
+
+	private static void showNoValueInsertedPrompt() {
+		showProductNotFoundPrompt();
+		JOptionPane.showMessageDialog(
+				null,
+				"Produto não encontrad",
+				"Erro - Produto Não Enconto",
 				JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -137,11 +200,7 @@ public class App {
 
 	private static void register(String data) {
 		if (data == null || data.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(
-					null,
-					"Nenhum dado inserido.",
-					"Erro de Entrada",
-					JOptionPane.WARNING_MESSAGE);
+			showNoValueInsertedPrompt();
 			return;
 		}
 
@@ -150,7 +209,7 @@ public class App {
 		for (int i = 0; i < splitData.length; i++) {
 			String field = splitData[i].trim();
 			if (field.isEmpty()) {
-				splitData[i] = "Não informado";
+				splitData[i] = NOTINFORMEDERROR;
 			} else {
 				splitData[i] = field;
 			}
@@ -214,14 +273,14 @@ public class App {
 				"Alterar Cliente",
 				JOptionPane.INFORMATION_MESSAGE);
 		if (newData == null || newData.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Nenhum dado inserido.", "Erro", JOptionPane.WARNING_MESSAGE);
+			showNoValueInsertedPrompt();
 			return;
 		}
 
 		String[] splitData = newData.split(",");
 		for (int i = 0; i < splitData.length; i++) {
 			String field = splitData[i].trim();
-			splitData[i] = field.isEmpty() ? "Não informado" : field;
+			splitData[i] = field.isEmpty() ? NOTINFORMEDERROR : field;
 		}
 
 		while (splitData.length < 6) {
@@ -241,7 +300,142 @@ public class App {
 				splitData[4],
 				splitData[5]);
 		iClientDAO.updateEntity(updatedClient);
-		JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso.", "Cliente Atualizado", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private static void searchProduct(String code) {
+		if (code == null || code.trim().isEmpty()) {
+			showMissingProductPrompt();
+			return;
+		}
+
+		Product product = iProductDAO.search(code);
+		if (product != null) {
+			JOptionPane.showMessageDialog(null, "Produto encontrado:\n" + product.toString(), "Informações do Produto", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			showProductNotFoundPrompt();
+		}
+	}
+
+	private static void registerProduct(String data) {
+		if (data == null || data.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(
+					null,
+					"Nenhum dado inserido.",
+					ENTRYERROR,
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		String[] splitData = data.split(",");
+
+		for (int i = 0; i < splitData.length; i++) {
+			String field = splitData[i].trim();
+			if (field.isEmpty()) {
+				splitData[i] = NOTINFORMEDERROR;
+			} else {
+				splitData[i] = field;
+			}
+		}
+
+		while (splitData.length < 5) {
+			int originalLength = splitData.length;
+			splitData = java.util.Arrays.copyOf(splitData, 5);
+			for (int i = originalLength; i < 5; i++) {
+				splitData[i] = null;
+			}
+		}
+
+		try {
+			double value = Double.parseDouble(splitData[3]);
+			Product product = new Product(splitData[0], splitData[1], splitData[2], value, splitData[4]);
+			boolean isRegistered = iProductDAO.register(product);
+			if (isRegistered) {
+				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(null, "Produto já cadastrado.", "Erro", JOptionPane.WARNING_MESSAGE);
+			}
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Valor inválido para o campo 'Valor'.", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private static void deleteProduct(String code) {
+		if (code == null || code.trim().isEmpty()) {
+			showMissingProductPrompt();
+			return;
+		}
+
+		Product product = iProductDAO.search(code);
+		if (product != null) {
+			iProductDAO.delete(code);
+			JOptionPane.showMessageDialog(null, "Produto excluído com sucesso.", "Sucesso na Exclusão", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			showProductNotFoundPrompt();
+		}
+	}
+
+	private static void modifyProduct(String code) {
+		if (code == null || code.trim().isEmpty()) {
+			showMissingProductPrompt();
+			return;
+		}
+
+		Product registeredProduct = iProductDAO.search(code);
+		if (registeredProduct == null) {
+			showProductNotFoundPrompt();
+			return;
+		}
+
+		String newData = JOptionPane.showInputDialog(
+				null,
+				"Digite os novos dados separados por vírgula:\nNome, Descrição, Valor, Marca",
+				"Modificar Produto",
+				JOptionPane.INFORMATION_MESSAGE);
+
+		if (newData == null || newData.trim().isEmpty()) {
+			showNoValueInsertedPrompt();
+			return;
+		}
+
+		String[] splitData = newData.split(",");
+		for (int i = 0; i < splitData.length; i++) {
+			String field = splitData[i].trim();
+			splitData[i] = field.isEmpty() ? NOTINFORMEDERROR : field;
+		}
+
+		while (splitData.length < 4) {
+			int originalLength = splitData.length;
+			splitData = java.util.Arrays.copyOf(splitData, 4);
+			for (int i = originalLength; i < 4; i++) {
+				splitData[i] = null;
+			}
+		}
+
+		try {
+			double value = Double.parseDouble(splitData[2]);
+			Product updatedProduct = new Product(
+					splitData[0],
+					code,
+					splitData[1],
+					value,
+					splitData[3]
+					);
+
+			iProductDAO.updateEntity(updatedProduct);
+			JOptionPane.showMessageDialog(
+					null,
+					"Produto atualizado com sucesso.",
+					"Produto Atualizado",
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(
+					null,
+					"Valor inválido para o campo 'Valor'.",
+					"Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private static void exit() {

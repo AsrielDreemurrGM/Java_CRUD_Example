@@ -37,5 +37,8 @@ public class ProductMapDAO extends GenericMapDAO<Product> implements IProductDAO
 	@Override
 	public void updateRegisteredEntityWithNewData(Product newEntity, Product registeredEntity) {
 		registeredEntity.setName(newEntity.getName());
+		registeredEntity.setDescription(newEntity.getDescription());
+		registeredEntity.setValue(newEntity.getValue());
+		registeredEntity.setBrand(newEntity.getBrand());
 	}
 }
