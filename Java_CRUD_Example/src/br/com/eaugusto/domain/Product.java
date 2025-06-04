@@ -5,10 +5,6 @@ public class Product implements Persistable {
 	private String code;
 	private String name;
 	
-	public String getCode() {
-		return code;
-	}
-	
 	public String getName() {
 		return name;
 	}

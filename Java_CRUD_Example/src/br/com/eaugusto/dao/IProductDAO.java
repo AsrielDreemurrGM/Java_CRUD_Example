@@ -1,18 +1,8 @@
 package br.com.eaugusto.dao;
 
-import java.util.Collection;
-
+import br.com.eaugusto.dao.generic.IGenericDAO;
 import br.com.eaugusto.domain.Product;
 
-public interface IProductDAO {
+public interface IProductDAO extends IGenericDAO<Product> {
 
-	public Boolean register(Product product);
-
-	public Product delete(String code);
-
-	public void modify(Product product);
-
-	public Product search(String code);
-
-	public Collection<Product> searchAll();
 }
