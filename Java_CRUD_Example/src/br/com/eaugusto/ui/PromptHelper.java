@@ -2,17 +2,34 @@ package br.com.eaugusto.ui;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Utility class for handling general prompts and error dialogs
+ * in the CRUD application using JOptionPane.
+ * 
+ * <p>This class is not meant to be instantiated.</p>
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since June 04, 2025
+ */
 public class PromptHelper {
 
 	private PromptHelper() {
 		// Utility class, must not be instantiated.
 	}
 
+	/**
+	 * Displays an exit message and terminates the application.
+	 */
 	public static void exitPrompt() {
 		JOptionPane.showMessageDialog(null, "Até logo :) ","Saindo", JOptionPane.INFORMATION_MESSAGE);
 		System.exit(0);
 	}
 
+	/**
+	 * Shows the dashboard input prompt for user interaction.
+	 * 
+	 * @return The option entered by the user.
+	 */
 	public static String showDashboardPrompt() {
 		return JOptionPane.showInputDialog(
 				null,
@@ -23,6 +40,11 @@ public class PromptHelper {
 				);
 	}
 
+	/**
+	 * Shows a warning when the user enters an invalid option.
+	 * 
+	 * @return The new option entered by the user.
+	 */
 	public static String showInvalidOptionPrompt() {
 		return JOptionPane.showInputDialog(
 				null,
@@ -34,6 +56,9 @@ public class PromptHelper {
 				JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Shows a warning when the CPF field is left empty.
+	 */
 	public static void showMissingCpfPrompt() {
 		JOptionPane.showMessageDialog(
 				null,
@@ -42,6 +67,9 @@ public class PromptHelper {
 				JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Shows a warning when the product code field is left empty.
+	 */
 	public static void showMissingProductPrompt() {
 		JOptionPane.showMessageDialog(
 				null,
@@ -49,7 +77,10 @@ public class PromptHelper {
 				"Erro de Entrada",
 				JOptionPane.WARNING_MESSAGE);
 	}
-
+	
+	/**
+	 * Informs the user that the requested client was not found.
+	 */
 	public static void showClientNotFoundPrompt() {
 		JOptionPane.showMessageDialog(
 				null,
@@ -58,6 +89,9 @@ public class PromptHelper {
 				JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Informs the user that the requested product was not found.
+	 */
 	public static void showProductNotFoundPrompt() {
 		JOptionPane.showMessageDialog(
 				null,
@@ -66,6 +100,9 @@ public class PromptHelper {
 				JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Shows a warning when no input value was provided.
+	 */
 	public static void showNoValueInsertedPrompt() {
 		JOptionPane.showMessageDialog(
 				null,
