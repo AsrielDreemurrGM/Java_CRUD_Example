@@ -1,5 +1,12 @@
 package br.com.eaugusto.domain;
 
+/**
+ * Represents a product with identifying code, description, and pricing details.
+ * Implements Persistable to provide a unique identifier (code).
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since June 02, 2025
+ */
 public class Product implements Persistable {
 
 	private String code;
@@ -8,6 +15,15 @@ public class Product implements Persistable {
 	private double value;
 	private String brand;
 	
+	/**
+	 * Constructs a Product instance with all attributes.
+	 * 
+	 * @param name product name
+	 * @param code unique product code
+	 * @param description product description
+	 * @param value product price/value
+	 * @param brand product brand
+	 */
 	public Product(String name, String code, String description, double value, String brand) {
 		this.name = name;
 		this.code = code;
@@ -16,6 +32,7 @@ public class Product implements Persistable {
 		this.brand = brand;
 	}
 	
+	// --- Getters ---
 	public String getDescription() {
 		return description;
 	}
@@ -28,6 +45,7 @@ public class Product implements Persistable {
 		return brand;
 	}
 
+	// --- Setters ---
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -52,6 +70,9 @@ public class Product implements Persistable {
 		this.name = name;
 	}
 	
+	/**
+	 * Returns a formatted string representing product details.
+	 */
 	@Override
 	public String toString() {
 	    return "Informações do Produto:\n"
@@ -62,6 +83,9 @@ public class Product implements Persistable {
 	        + "Marca: " + brand;
 	}
 
+	/**
+	 * Returns the unique product code as the persistence identifier.
+	 */
 	@Override
 	public String getCodeOrCPF() {
 		return this.code;

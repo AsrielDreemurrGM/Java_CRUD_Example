@@ -2,6 +2,13 @@ package br.com.eaugusto.domain;
 
 import java.util.Objects;
 
+/**
+ * Represents a client (customer) with personal and contact information.
+ * Implements Persistable to provide a unique identifier (CPF).
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since May 20, 2025
+ */
 public class Client implements Persistable {
 
 	private String name;
@@ -12,6 +19,17 @@ public class Client implements Persistable {
 	private String city;
 	private String state;
 
+	/**
+	 * Constructs a Client instance with full details.
+	 * 
+	 * @param name client's full name
+	 * @param cpf unique identifier (Brazilian CPF)
+	 * @param phoneNumber contact phone number
+	 * @param address street address
+	 * @param addressNumber number of the address
+	 * @param city city of residence
+	 * @param state state of residence
+	 */
 	public Client(String name, String cpf, String phoneNumber, String address, String addressNumber, String city, String state) {
 		this.name = name;
 		this.cpf = cpf.trim();
@@ -22,6 +40,7 @@ public class Client implements Persistable {
 		this.state = state;
 	}
 
+	// --- Getters ---
 	public String getName() {
 		return name;
 	}
@@ -50,6 +69,7 @@ public class Client implements Persistable {
 		return state;
 	}
 
+	// --- Setters ---
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -78,6 +98,12 @@ public class Client implements Persistable {
 		this.state = state;
 	}
 	
+	/**
+	 * Updates this client's fields with the data from another Client instance,
+	 * except CPF, which uniquely identifies this client.
+	 * 
+	 * @param newInformations client object with updated data
+	 */
 	public void updateWith(Client newInformations) {
 	    this.setName(newInformations.getName());
 	    this.setPhoneNumber(newInformations.getPhoneNumber());
@@ -87,6 +113,9 @@ public class Client implements Persistable {
 	    this.setState(newInformations.getState());
 	}
 
+	/**
+	 * Equality is based solely on CPF since it uniquely identifies the client.
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(cpf);
@@ -104,6 +133,9 @@ public class Client implements Persistable {
 		return Objects.equals(cpf, other.cpf);
 	}
 
+	/**
+	 * Returns a formatted string representing client's details.
+	 */
 	@Override
 	public String toString() {
 		return 
@@ -117,6 +149,9 @@ public class Client implements Persistable {
 				+ "\nEstado: " + state;
 	}
 
+	/**
+	 * Returns the unique identifier (CPF) as the code for persistence.
+	 */
 	@Override
 	public String getCodeOrCPF() {
 		return this.cpf;
