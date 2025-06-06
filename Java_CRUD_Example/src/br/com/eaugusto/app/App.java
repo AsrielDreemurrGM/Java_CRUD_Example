@@ -44,11 +44,12 @@ import br.com.eaugusto.ui.PromptHelper;
  */
 public class App {
 
-	// Toggle this flag for quick switching between using Set or Map for storage
 	private static final String NOTINFORMEDERROR = "Não informado";
 	private static final String ENTRYERROR = "Erro de Entrada";
-	boolean useMap = true;
-	IClientDAO clientDAO = useMap ? new ClientMapDAO() : new ClientSetDAO();
+
+	// Toggle this flag for quick switching between using Set or Map for storage
+	private static final boolean USEMAP = true;
+	private static final IClientDAO clientDAO = USEMAP ? new ClientMapDAO() : new ClientSetDAO();
 
 	private static IClientDAO iClientDAO;
 	private static IProductDAO iProductDAO;
@@ -62,13 +63,13 @@ public class App {
 	 * @param args command-line arguments (not used)
 	 */
 	public static void main(String[] args) {
-	    iClientDAO = new ClientMapDAO();
-	    iProductDAO = new ProductMapDAO();
+		iClientDAO = clientDAO;
+		iProductDAO = new ProductMapDAO();
 
-	    int entityChoice = MenuHelper.showEntitySelection();
-	    boolean isClient = MenuHelper.isClientSelected(entityChoice);
+		int entityChoice = MenuHelper.showEntitySelection();
+		boolean isClient = MenuHelper.isClientSelected(entityChoice);
 
-	    runDashboardLoop(isClient);
+		runDashboardLoop(isClient);
 	}
 
 	/**
@@ -79,25 +80,25 @@ public class App {
 	 * @param isClient {@code true} if managing Clients, {@code false} if managing Products
 	 */
 	private static void runDashboardLoop(boolean isClient) {
-	    String option = MenuHelper.showDashboardPrompt();
+		String option = MenuHelper.showDashboardPrompt();
 
-	    while (!MenuHelper.isValidOption(option)) {
-	        if (option == null) {
-	            PromptHelper.exitPrompt();
-	        }
-	        option = MenuHelper.showInvalidOptionPrompt();
-	    }
+		while (!MenuHelper.isValidOption(option)) {
+			if (option == null) {
+				PromptHelper.exitPrompt();
+			}
+			option = MenuHelper.showInvalidOptionPrompt();
+		}
 
-	    while (MenuHelper.isValidOption(option)) {
-	        if (MenuHelper.isExitOption(option)) {
-	            PromptHelper.exitPrompt();
-	        } else {
-	            handleOption(option, isClient);
-	        }
-	        option = MenuHelper.showDashboardPrompt();
-	    }
+		while (MenuHelper.isValidOption(option)) {
+			if (MenuHelper.isExitOption(option)) {
+				PromptHelper.exitPrompt();
+			} else {
+				handleOption(option, isClient);
+			}
+			option = MenuHelper.showDashboardPrompt();
+		}
 	}
-	
+
 	/**
 	 * Handles a single user-selected option from the dashboard.
 	 * <p>
@@ -108,66 +109,66 @@ public class App {
 	 * @param isClient {@code true} if managing Clients, {@code false} if managing Products
 	 */
 	private static void handleOption(String option, boolean isClient) {
-	    if (MenuHelper.isRegisterOption(option)) {
-	        String data = JOptionPane.showInputDialog(
-	            null,
-	            isClient
-	                ? "Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado"
-	                : "Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
-	            "Cadastrar",
-	            JOptionPane.INFORMATION_MESSAGE
-	        );
+		if (MenuHelper.isRegisterOption(option)) {
+			String data = JOptionPane.showInputDialog(
+					null,
+					isClient
+					? "Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado"
+							: "Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
+							"Cadastrar",
+							JOptionPane.INFORMATION_MESSAGE
+					);
 
-	        if (isClient) {
-	            registerClient(data);
-	        } else {
-	            registerProduct(data);
-	        }
+			if (isClient) {
+				registerClient(data);
+			} else {
+				registerProduct(data);
+			}
 
-	    } else if (MenuHelper.isSearchOption(option)) {
-	        String data = JOptionPane.showInputDialog(
-	            null,
-	            isClient ? "Digite o CPF:" : "Digite o código do produto:",
-	            "Pesquisar",
-	            JOptionPane.INFORMATION_MESSAGE
-	        );
+		} else if (MenuHelper.isSearchOption(option)) {
+			String data = JOptionPane.showInputDialog(
+					null,
+					isClient ? "Digite o CPF:" : "Digite o código do produto:",
+							"Pesquisar",
+							JOptionPane.INFORMATION_MESSAGE
+					);
 
-	        if (isClient) {
-	            searchClient(data);
-	        } else {
-	            searchProduct(data);
-	        }
+			if (isClient) {
+				searchClient(data);
+			} else {
+				searchProduct(data);
+			}
 
-	    } else if (MenuHelper.isDeleteOption(option)) {
-	        String codeOrCpf = JOptionPane.showInputDialog(
-	            null,
-	            isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
-	            "Excluir",
-	            JOptionPane.INFORMATION_MESSAGE
-	        );
+		} else if (MenuHelper.isDeleteOption(option)) {
+			String codeOrCpf = JOptionPane.showInputDialog(
+					null,
+					isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
+							"Excluir",
+							JOptionPane.INFORMATION_MESSAGE
+					);
 
-	        if (isClient) {
-	            deleteClient(codeOrCpf);
-	        } else {
-	            deleteProduct(codeOrCpf);
-	        }
+			if (isClient) {
+				deleteClient(codeOrCpf);
+			} else {
+				deleteProduct(codeOrCpf);
+			}
 
-	    } else if (MenuHelper.isModifyOption(option)) {
-	        String codeOrCpf = JOptionPane.showInputDialog(
-	            null,
-	            isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
-	            "Alterar",
-	            JOptionPane.INFORMATION_MESSAGE
-	        );
+		} else if (MenuHelper.isModifyOption(option)) {
+			String codeOrCpf = JOptionPane.showInputDialog(
+					null,
+					isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
+							"Alterar",
+							JOptionPane.INFORMATION_MESSAGE
+					);
 
-	        if (isClient) {
-	            modifyClient(codeOrCpf);
-	        } else {
-	            modifyProduct(codeOrCpf);
-	        }
-	    }
+			if (isClient) {
+				modifyClient(codeOrCpf);
+			} else {
+				modifyProduct(codeOrCpf);
+			}
+		}
 	}
-	
+
 	/**
 	 * Searches for a Client based on the provided CPF.
 	 * <p>
