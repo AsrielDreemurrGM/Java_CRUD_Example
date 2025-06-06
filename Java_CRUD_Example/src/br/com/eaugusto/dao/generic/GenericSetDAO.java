@@ -9,9 +9,23 @@ import br.com.eaugusto.domain.Persistable;
 
 
 /**
- * Abstract implementation of a generic DAO using Sets for storage.
- *
- * @param <T> The type of entity.
+ * Abstract generic DAO implementation using an in-memory Map of Sets to store entities.
+ * <p>
+ * This class provides basic CRUD operations (Create, Read, Update, Delete)
+ * for any {@link Persistable} entity type. The storage is organized as:
+ * <pre>
+ * Map&lt;Class&lt;T&gt;, Set&lt;T&gt;&gt;
+ * </pre>
+ * Meaning each entity type gets its own Set of entities. Duplicate entries are prevented
+ * based on the entity's {@link Object#equals(Object)} and {@link Object#hashCode()} methods.
+ * <p>
+ * Subclasses must implement:
+ * <ul>
+ *     <li>{@link #getClassType()} to specify the entity type managed</li>
+ *     <li>{@link #updateRegisteredEntityWithNewData(Object, Object)} to define how entities are updated</li>
+ * </ul>
+ * 
+ * @param <T> The type of entity managed by this DAO (must implement {@link Persistable}).
  * 
  * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
  * @since June 02, 2025
@@ -20,8 +34,24 @@ public abstract class GenericSetDAO<T extends Persistable> implements IGenericDA
 
 	protected Map<Class<T>, Set<T>> storage;
 
+	/**
+	 * Returns the class type of the entity managed by this DAO.
+	 * <p>
+	 * This is used as the key for the internal storage Map.
+	 * 
+	 * @return the Class of the entity type.
+	 */
 	public abstract Class<T> getClassType();
 
+	/**
+	 * Updates the registered entity in the Set with the new entity data.
+	 * <p>
+	 * Implementations must define how the fields of {@code registeredEntity} are updated
+	 * based on the values of {@code newEntity}.
+	 * 
+	 * @param newEntity the new entity containing updated data.
+	 * @param registeredEntity the currently registered entity to update.
+	 */
 	public abstract void updateRegisteredEntityWithNewData(T newEntity, T registeredEntity);
 
 	protected GenericSetDAO() {
@@ -39,7 +69,7 @@ public abstract class GenericSetDAO<T extends Persistable> implements IGenericDA
 			this.storage.put(getClassType(), entitySet);
 		}
 
-		return entitySet.add(entity); // Set rejects duplicates based on equals/hashCode
+		return entitySet.add(entity);
 	}
 
 	@Override

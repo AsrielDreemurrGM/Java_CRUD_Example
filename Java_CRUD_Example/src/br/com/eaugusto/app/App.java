@@ -11,6 +11,37 @@ import br.com.eaugusto.domain.Product;
 import br.com.eaugusto.ui.MenuHelper;
 import br.com.eaugusto.ui.PromptHelper;
 
+/**
+ * Main application class for managing Clients and Products.
+ * <p>
+ * This application provides a simple CRUD interface (using JOptionPane) to register,
+ * search, delete, and modify Clients and Products in memory, using either a Map-based DAO
+ * or Set-based DAO for Clients, and Map-based DAO for Products.
+ * <p>
+ * The program allows the user to choose whether to manage Clients or Products,
+ * and presents a simple dashboard to perform the available operations.
+ *
+ * <h2>Features:</h2>
+ * <ul>
+ *   <li>Switch between using {@code ClientMapDAO} and {@code ClientSetDAO} for client storage</li>
+ *   <li>Support for CRUD operations on Clients and Products</li>
+ *   <li>User interaction via graphical dialog prompts (JOptionPane)</li>
+ * </ul>
+ * 
+ * <p>
+ * All DAO interfaces and implementations follow the generic {@code IGenericDAO<T>} contract.
+ * The business logic and interaction logic is encapsulated within this class.
+ * 
+ * <p>
+ * Known limitations:
+ * <ul>
+ *   <li>Storage is in-memory (no persistence to file or database)</li>
+ *   <li>Simple input validation</li>
+ * </ul>
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since May 21, 2025
+ */
 public class App {
 
 	// Toggle this flag for quick switching between using Set or Map for storage
@@ -22,6 +53,14 @@ public class App {
 	private static IClientDAO iClientDAO;
 	private static IProductDAO iProductDAO;
 
+	/**
+	 * Entry point of the application.
+	 * <p>
+	 * Initializes the DAOs and launches the dashboard for Client or Product management.
+	 * Presents a dialog to select whether to manage Clients or Products, and starts the interactive loop.
+	 * 
+	 * @param args command-line arguments (not used)
+	 */
 	public static void main(String[] args) {
 	    iClientDAO = new ClientMapDAO();
 	    iProductDAO = new ProductMapDAO();
@@ -32,6 +71,13 @@ public class App {
 	    runDashboardLoop(isClient);
 	}
 
+	/**
+	 * Runs the main dashboard interaction loop.
+	 * <p>
+	 * Continues to show the dashboard until the user chooses to exit.
+	 * 
+	 * @param isClient {@code true} if managing Clients, {@code false} if managing Products
+	 */
 	private static void runDashboardLoop(boolean isClient) {
 	    String option = MenuHelper.showDashboardPrompt();
 
@@ -52,6 +98,15 @@ public class App {
 	    }
 	}
 	
+	/**
+	 * Handles a single user-selected option from the dashboard.
+	 * <p>
+	 * Depending on the selected option, invokes register, search, delete, or modify actions
+	 * for either Clients or Products.
+	 * 
+	 * @param option the selected option
+	 * @param isClient {@code true} if managing Clients, {@code false} if managing Products
+	 */
 	private static void handleOption(String option, boolean isClient) {
 	    if (MenuHelper.isRegisterOption(option)) {
 	        String data = JOptionPane.showInputDialog(
@@ -64,7 +119,7 @@ public class App {
 	        );
 
 	        if (isClient) {
-	            register(data);
+	            registerClient(data);
 	        } else {
 	            registerProduct(data);
 	        }
@@ -78,7 +133,7 @@ public class App {
 	        );
 
 	        if (isClient) {
-	            search(data);
+	            searchClient(data);
 	        } else {
 	            searchProduct(data);
 	        }
@@ -92,7 +147,7 @@ public class App {
 	        );
 
 	        if (isClient) {
-	            delete(codeOrCpf);
+	            deleteClient(codeOrCpf);
 	        } else {
 	            deleteProduct(codeOrCpf);
 	        }
@@ -106,14 +161,21 @@ public class App {
 	        );
 
 	        if (isClient) {
-	            modify(codeOrCpf);
+	            modifyClient(codeOrCpf);
 	        } else {
 	            modifyProduct(codeOrCpf);
 	        }
 	    }
 	}
 	
-	private static void search(String data) {
+	/**
+	 * Searches for a Client based on the provided CPF.
+	 * <p>
+	 * Displays client information if found, or an appropriate message if not found.
+	 * 
+	 * @param data the CPF to search for
+	 */
+	private static void searchClient(String data) {
 		if(data == null || data.trim().isEmpty()) {
 			PromptHelper.showMissingCpfPrompt();
 			return;
@@ -132,7 +194,14 @@ public class App {
 		}
 	}
 
-	private static void register(String data) {
+	/**
+	 * Registers a new Client based on the provided input string.
+	 * <p>
+	 * Parses the user input and fills missing values with "Não informado" (Not informed).
+	 * 
+	 * @param data input string containing client fields separated by commas
+	 */
+	private static void registerClient(String data) {
 		if (data == null || data.trim().isEmpty()) {
 			PromptHelper.showNoValueInsertedPrompt();
 			return;
@@ -174,7 +243,15 @@ public class App {
 		}
 	}
 
-	private static void delete(String cpf) {
+	/**
+	 * Deletes a Client based on the provided CPF.
+	 * <p>
+	 * If the Client exists, it is removed from the data store and the user is notified.
+	 * If not found, a message is shown.
+	 * 
+	 * @param cpf the CPF of the Client to delete
+	 */
+	private static void deleteClient(String cpf) {
 		if (cpf == null || cpf.trim().isEmpty()) {
 			PromptHelper.showMissingCpfPrompt();
 			return;
@@ -189,7 +266,14 @@ public class App {
 		}
 	}
 
-	private static void modify(String cpf) {
+	/**
+	 * Modifies an existing Client based on the provided CPF.
+	 * <p>
+	 * Prompts the user for new values and updates the registered Client accordingly.
+	 * 
+	 * @param cpf the CPF of the Client to be modified
+	 */
+	private static void modifyClient(String cpf) {
 		if (cpf == null || cpf.trim().isEmpty()) {
 			PromptHelper.showMissingCpfPrompt();
 			return;
@@ -237,6 +321,13 @@ public class App {
 		JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso.", "Cliente Atualizado", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Searches for a Product based on the provided product code.
+	 * <p>
+	 * Displays product information if found, or an appropriate message if not found.
+	 * 
+	 * @param code the product code to search for
+	 */
 	private static void searchProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
 			PromptHelper.showMissingProductPrompt();
@@ -251,6 +342,14 @@ public class App {
 		}
 	}
 
+	/**
+	 * Registers a new Product based on the provided input string.
+	 * <p>
+	 * Parses the user input and fills missing values with "Não informado".
+	 * Attempts to parse the "Valor" field as a double.
+	 * 
+	 * @param data input string containing product fields separated by commas
+	 */
 	private static void registerProduct(String data) {
 		if (data == null || data.trim().isEmpty()) {
 			JOptionPane.showMessageDialog(
@@ -294,6 +393,14 @@ public class App {
 		}
 	}
 
+	/**
+	 * Deletes a Product based on the provided product code.
+	 * <p>
+	 * If the Product exists, it is removed from the data store and the user is notified.
+	 * If not found, a message is shown.
+	 * 
+	 * @param code the product code of the Product to delete
+	 */
 	private static void deleteProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
 			PromptHelper.showMissingProductPrompt();
@@ -309,6 +416,14 @@ public class App {
 		}
 	}
 
+	/**
+	 * Modifies an existing Product based on the provided product code.
+	 * <p>
+	 * Prompts the user for new values and updates the registered Product accordingly.
+	 * Attempts to parse the "Valor" field as a double.
+	 * 
+	 * @param code the code of the Product to be modified
+	 */
 	private static void modifyProduct(String code) {
 		if (code == null || code.trim().isEmpty()) {
 			PromptHelper.showMissingProductPrompt();
