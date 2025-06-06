@@ -16,44 +16,42 @@ import br.com.eaugusto.domain.Persistable;
  */
 public abstract class GenericMapDAO<T extends Persistable> implements IGenericDAO<T> {
 
-	protected Map<Class<T>, Map<String, T>> map;
+	// Outer map: associates each class with its corresponding map of entities
+	protected Map<Class<T>, Map<String, T>> storage;
 
 	public abstract Class<T> getClassType();
 
 	public abstract void updateRegisteredEntityWithNewData(T newEntity, T registeredEntity);
 
 	protected GenericMapDAO() {
-		if (this.map == null) {
-			this.map = new HashMap<>();
-		}
+		this.storage = new HashMap<>();
+		storage.computeIfAbsent(getClassType(), entityClass -> new HashMap<>());
 	}
 
 	@Override
 	public Boolean register(T entity) {
-		Map<String, T> innerMap = this.map.get(getClassType());
-		if (innerMap.containsKey(entity.getCodeOrCPF())) {
+		Map<String, T> entityMap = storage.get(getClassType());
+		if (entityMap.containsKey(entity.getCodeOrCPF())) {
 			return false;
 		}
-		innerMap.put(entity.getCodeOrCPF(), entity);
+		entityMap.put(entity.getCodeOrCPF(), entity);
 		return true;
 	}
 
 	@Override
-	public void delete(String value) {
-		Map<String, T> innerMap = this.map.get(getClassType());
-
-		T registeredEntity = innerMap.get(value);
+	public void delete(String identifier) {
+		Map<String, T> entityMap = storage.get(getClassType());
+		T registeredEntity = entityMap.get(identifier);
 
 		if (registeredEntity != null) {
-			innerMap.remove(value);
+			entityMap.remove(identifier);
 		}
 	}
 
 	@Override
 	public void updateEntity(T entity) {
-		Map<String, T> innerMap = this.map.get(getClassType());
-
-		T registeredEntity = innerMap.get(entity.getCodeOrCPF());
+		Map<String, T> entityMap = storage.get(getClassType());
+		T registeredEntity = entityMap.get(entity.getCodeOrCPF());
 
 		if (registeredEntity != null) {
 			updateRegisteredEntityWithNewData(entity, registeredEntity);
@@ -61,16 +59,14 @@ public abstract class GenericMapDAO<T extends Persistable> implements IGenericDA
 	}
 
 	@Override
-	public T search(String value) {
-		Map<String, T> innerMap = this.map.get(getClassType());
-
-		return innerMap.get(value);
+	public T search(String identifier) {
+		Map<String, T> entityMap = storage.get(getClassType());
+		return entityMap.get(identifier);
 	}
 
 	@Override
 	public Collection<T> searchAll() {
-		Map<String, T> innerMap = this.map.get(getClassType());
-
-		return innerMap.values();
+		Map<String, T> entityMap = storage.get(getClassType());
+		return entityMap.values();
 	}
 }
