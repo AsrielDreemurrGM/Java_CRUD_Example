@@ -3,6 +3,16 @@ package br.com.eaugusto.dao;
 import br.com.eaugusto.dao.generic.GenericMapDAO;
 import br.com.eaugusto.domain.Product;
 
+/**
+ * DAO Implementation For Managing Product Entities Using GenericMapDAO.
+ * 
+ * <p>This class specializes {@link GenericMapDAO} for {@link Product} entities.</p>
+ * 
+ * It provides the concrete Class type and updates product fields accordingly.
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since June 03, 2025
+ */
 public class ProductMapDAO extends GenericMapDAO<Product> implements IProductDAO {
 
 	public ProductMapDAO() {

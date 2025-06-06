@@ -7,6 +7,17 @@ import java.util.Set;
 import br.com.eaugusto.dao.generic.GenericSetDAO;
 import br.com.eaugusto.domain.Client;
 
+/**
+ * DAO Implementation For Managing Client Entities Using GenericSetDAO.
+ * 
+ * <p>This class uses a generic Set-based storage for {@link Client} entities,
+ * handling the underlying storage map for entity sets.</p>
+ * 
+ * It implements basic CRUD operations and updates client data accordingly.
+ *
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since May 21, 2025
+ */
 public class ClientSetDAO extends GenericSetDAO<Client> implements IClientDAO {
 
 	public ClientSetDAO() {
