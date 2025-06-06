@@ -7,6 +7,15 @@ import java.util.Set;
 
 import br.com.eaugusto.domain.Persistable;
 
+
+/**
+ * Abstract implementation of a generic DAO using Sets for storage.
+ *
+ * @param <T> The type of entity.
+ * 
+ * @author Eduardo Augusto (https://github.com/AsrielDreemurrGM/)
+ * @since June 02, 2025
+ */
 public abstract class GenericSetDAO<T extends Persistable> implements IGenericDAO<T> {
 
 	protected Map<Class<T>, Set<T>> storage;
@@ -25,67 +34,67 @@ public abstract class GenericSetDAO<T extends Persistable> implements IGenericDA
 	public Boolean register(T entity) {
 		Set<T> entitySet = this.storage.get(getClassType());
 
-	    if (entitySet == null) {
-	        entitySet = new java.util.HashSet<>();
-	        this.storage.put(getClassType(), entitySet);
-	    }
+		if (entitySet == null) {
+			entitySet = new java.util.HashSet<>();
+			this.storage.put(getClassType(), entitySet);
+		}
 
-	    return entitySet.add(entity);
+		return entitySet.add(entity); // Set rejects duplicates based on equals/hashCode
 	}
 
 	@Override
 	public void delete(String value) {
-	    Set<T> entitySet = this.storage.get(getClassType());
+		Set<T> entitySet = this.storage.get(getClassType());
 
-	    if (entitySet == null) return;
+		if (entitySet == null) return;
 
-	    T toRemove = null;
+		T toRemove = null;
 
-	    for (T entity : entitySet) {
-	        if (entity.getCodeOrCPF().equals(value)) {
-	            toRemove = entity;
-	            break;
-	        }
-	    }
+		for (T entity : entitySet) {
+			if (entity.getCodeOrCPF().equals(value)) {
+				toRemove = entity;
+				break;
+			}
+		}
 
-	    if (toRemove != null) {
-	        entitySet.remove(toRemove);
-	    }
+		if (toRemove != null) {
+			entitySet.remove(toRemove);
+		}
 	}
 
 	@Override
 	public void updateEntity(T entity) {
 		Set<T> entitySet = this.storage.get(getClassType());
 
-	    if (entitySet == null) return;
+		if (entitySet == null) return;
 
-	    for (T registered : entitySet) {
-	        if (registered.getCodeOrCPF().equals(entity.getCodeOrCPF())) {
-	            updateRegisteredEntityWithNewData(entity, registered);
-	            break;
-	        }
-	    }
+		for (T registered : entitySet) {
+			if (registered.getCodeOrCPF().equals(entity.getCodeOrCPF())) {
+				updateRegisteredEntityWithNewData(entity, registered);
+				break;
+			}
+		}
 	}
 
 	@Override
 	public T search(String value) {
 		Set<T> entitySet = this.storage.get(getClassType());
 
-	    if (entitySet == null) return null;
+		if (entitySet == null) return null;
 
-	    for (T entity : entitySet) {
-	        if (entity.getCodeOrCPF().equals(value)) {
-	            return entity;
-	        }
-	    }
+		for (T entity : entitySet) {
+			if (entity.getCodeOrCPF().equals(value)) {
+				return entity;
+			}
+		}
 
-	    return null;
+		return null;
 	}
 
 	@Override
 	public Collection<T> searchAll() {
 		Set<T> entitySet = this.storage.get(getClassType());
-		
-	    return entitySet != null ? entitySet : java.util.Collections.emptySet();
+
+		return entitySet != null ? entitySet : java.util.Collections.emptySet();
 	}
 }
