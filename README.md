@@ -1,10 +1,14 @@
 <h1>Project 1 - Java_CRUD_Example</h1>
-  <p>
+ 📄 README Em PT-BR:
+
+- [Versão em Português](README_pt_BR.md)
+
+<p>
     <strong>About</strong><br />
     Java desktop application using <code>JOptionPane</code> to manage client and product data with full CRUD operations, 
     interface-based DAO pattern, input validation, and in-memory storage (Map or Set). Built to reinforce object-oriented principles, generics, and Java fundamentals.<br />
     Includes a refactored and modular architecture with reusable components and polished UI interactions.
-  </p>
+</p>
 <h2>🖼️ Screenshot</h2>
   <p>A quick look at the main application panels side by side, showcasing the user interface and workflow.</p>
 
