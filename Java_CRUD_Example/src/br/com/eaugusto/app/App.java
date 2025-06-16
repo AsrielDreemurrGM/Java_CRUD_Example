@@ -6,6 +6,7 @@ import br.com.eaugusto.dao.ClientSetDAO;
 import br.com.eaugusto.dao.IClientDAO;
 import br.com.eaugusto.dao.IProductDAO;
 import br.com.eaugusto.dao.ProductMapDAO;
+import br.com.eaugusto.dao.ProductSetDAO;
 import br.com.eaugusto.domain.Client;
 import br.com.eaugusto.domain.Product;
 import br.com.eaugusto.ui.MenuHelper;
@@ -50,6 +51,7 @@ public class App {
 	// Toggle this flag for quick switching between using Set or Map for storage
 	private static final boolean USEMAP = true;
 	private static final IClientDAO clientDAO = USEMAP ? new ClientMapDAO() : new ClientSetDAO();
+	private static final IProductDAO productDAO = USEMAP ? new ProductMapDAO() : new ProductSetDAO();
 
 	private static IClientDAO iClientDAO;
 	private static IProductDAO iProductDAO;
@@ -64,7 +66,7 @@ public class App {
 	 */
 	public static void main(String[] args) {
 		iClientDAO = clientDAO;
-		iProductDAO = new ProductMapDAO();
+		iProductDAO = productDAO;
 
 		int entityChoice = MenuHelper.showEntitySelection();
 		boolean isClient = MenuHelper.isClientSelected(entityChoice);
