@@ -104,70 +104,103 @@ public class App {
 	/**
 	 * Handles a single user-selected option from the dashboard.
 	 * <p>
-	 * Depending on the selected option, invokes register, search, delete, or modify actions
-	 * for either Clients or Products.
-	 * 
-	 * @param option the selected option
+	 * Delegates the operation based on whether the user chose
+	 * to manage Clients or Products.
+	 *
+	 * @param option   the selected option
 	 * @param isClient {@code true} if managing Clients, {@code false} if managing Products
 	 */
 	private static void handleOption(String option, boolean isClient) {
 		if (MenuHelper.isRegisterOption(option)) {
-			String data = JOptionPane.showInputDialog(
-					null,
-					isClient
-					? "Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado"
-							: "Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca",
-							"Cadastrar",
-							JOptionPane.INFORMATION_MESSAGE
-					);
-
-			if (isClient) {
-				registerClient(data);
-			} else {
-				registerProduct(data);
-			}
-
+			handleRegister(isClient);
 		} else if (MenuHelper.isSearchOption(option)) {
-			String data = JOptionPane.showInputDialog(
-					null,
-					isClient ? "Digite o CPF:" : "Digite o código do produto:",
-							"Pesquisar",
-							JOptionPane.INFORMATION_MESSAGE
-					);
-
-			if (isClient) {
-				searchClient(data);
-			} else {
-				searchProduct(data);
-			}
-
+			handleSearch(isClient);
 		} else if (MenuHelper.isDeleteOption(option)) {
-			String codeOrCpf = JOptionPane.showInputDialog(
-					null,
-					isClient ? "Digite o CPF do cliente a excluir:" : "Digite o código do produto a excluir:",
-							"Excluir",
-							JOptionPane.INFORMATION_MESSAGE
-					);
-
-			if (isClient) {
-				deleteClient(codeOrCpf);
-			} else {
-				deleteProduct(codeOrCpf);
-			}
-
+			handleDelete(isClient);
 		} else if (MenuHelper.isModifyOption(option)) {
-			String codeOrCpf = JOptionPane.showInputDialog(
-					null,
-					isClient ? "Digite o CPF do cliente a alterar:" : "Digite o código do produto a alterar:",
-							"Alterar",
-							JOptionPane.INFORMATION_MESSAGE
-					);
+			handleModify(isClient);
+		}
+	}
 
-			if (isClient) {
-				modifyClient(codeOrCpf);
-			} else {
-				modifyProduct(codeOrCpf);
-			}
+	/**
+	 * Handles the register operation.
+	 * <p>
+	 * Prompts the user to enter data for a Client or Product
+	 * and delegates to the appropriate registration method.
+	 *
+	 * @param isClient {@code true} if registering a Client, {@code false} if a Product
+	 */
+	private static void handleRegister(boolean isClient) {
+		String prompt = isClient
+			? "Digite os dados do cliente separados por vírgula:\nNome, CPF, Telefone, Endereço, Número, Cidade, Estado"
+			: "Digite os dados do produto separados por vírgula:\nNome, Código, Descrição, Valor, Marca";
+
+		String data = JOptionPane.showInputDialog(null, prompt, "Cadastrar", JOptionPane.INFORMATION_MESSAGE);
+
+		if (isClient) {
+			registerClient(data);
+		} else {
+			registerProduct(data);
+		}
+	}
+
+	/**
+	 * Handles the search operation.
+	 * <p>
+	 * Prompts the user to enter a key (CPF or product code) and delegates to the corresponding search method.
+	 *
+	 * @param isClient {@code true} if searching for a Client, {@code false} if a Product
+	 */
+	private static void handleSearch(boolean isClient) {
+		String message = isClient ? "Digite o CPF:" : "Digite o código do produto:";
+		String data = JOptionPane.showInputDialog(null, message, "Pesquisar", JOptionPane.INFORMATION_MESSAGE);
+
+		if (isClient) {
+			searchClient(data);
+		} else {
+			searchProduct(data);
+		}
+	}
+
+	/**
+	 * Handles the delete operation.
+	 * <p>
+	 * Prompts the user to enter a key (CPF or product code) and delegates to the corresponding delete method.
+	 *
+	 * @param isClient {@code true} if deleting a Client, {@code false} if a Product
+	 */
+	private static void handleDelete(boolean isClient) {
+		String message = isClient
+			? "Digite o CPF do cliente a excluir:"
+			: "Digite o código do produto a excluir:";
+
+		String codeOrCpf = JOptionPane.showInputDialog(null, message, "Excluir", JOptionPane.INFORMATION_MESSAGE);
+
+		if (isClient) {
+			deleteClient(codeOrCpf);
+		} else {
+			deleteProduct(codeOrCpf);
+		}
+	}
+
+	/**
+	 * Handles the modify operation.
+	 * <p>
+	 * Prompts the user to enter a key (CPF or product code) and delegates to the corresponding modify method.
+	 *
+	 * @param isClient {@code true} if modifying a Client, {@code false} if a Product
+	 */
+	private static void handleModify(boolean isClient) {
+		String message = isClient
+			? "Digite o CPF do cliente a alterar:"
+			: "Digite o código do produto a alterar:";
+
+		String codeOrCpf = JOptionPane.showInputDialog(null, message, "Alterar", JOptionPane.INFORMATION_MESSAGE);
+
+		if (isClient) {
+			modifyClient(codeOrCpf);
+		} else {
+			modifyProduct(codeOrCpf);
 		}
 	}
 
